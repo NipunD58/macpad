@@ -1,12 +1,13 @@
 # Nipun's Macpad
-First time with PCB and CAD don't judge
+First time with PCB and CAD, pls don't judge
+made this for hackclub blueprint <3
 
 ### Inspiration
 
-I wanted to create a macropad that helps me to be more productive. I created a macropad using 4 switches, 1 rp2040, and 2 leds. 
+I wanted to create a macropad that helps me to be more productive. I created a Macropad using 4 switches, 1 rp2040, and 2 leds. 
 
 ### Challenges
-Fusion 360 was very hard to use as a beginner. it took most of my time in making the macpad
+Fusion 360 was very hard to use as a beginner. It took most of my time to make the MacPad
 ### Specifications
 
 BOM: 
