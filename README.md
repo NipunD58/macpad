@@ -12,7 +12,7 @@ Fusion 360 was very hard to use as a beginner. It took most of my time to make t
 
 BOM: 
 - 4x Cherry MX Switches
-- 2x SK6812 MINI Leds
+- 3x SK6812 MINI Leds
 - 1x XIAO RP2040
 - 4x Blank DSA Keycaps
 - 4x M3x16 Bolt
