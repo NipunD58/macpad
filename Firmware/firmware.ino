@@ -185,7 +185,7 @@ void setup() {
   handServo2.attach(HAND_SERVO_2_PIN);
   
   motorServo.write(90);  // 360 servo stopped
-  armServo.write(90);     // Arm servo starts at 0 degrees
+  armServo.write(90);     // Arm servo starts at 90 degrees
   debugPrint("Servos attached - arm servo at 0 degrees");
 
   // Initialize OLED using U8g2 with I2C scanning
@@ -396,7 +396,7 @@ void catapultAction() {
   eyeAnimationServo();
   handAnimationPoint();  // Point toward the arm
   
-  // Move servo from 0 to 90 degrees and STOP (no going back)
+  // Move servo to 0 degrees and STOP (no going back)
   armServo.write(0);
   Serial.println("Catapult launched! Servo moved - STOPPED");
   
