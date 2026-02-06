@@ -33,8 +33,6 @@ int touchCount = 0;  // 0 = waiting for first touch, 1 = motor done, 2 = humidif
 // ===== TIMING =====
 const unsigned long MOTOR_HOLD_TIME = 5000;  // Time to hold at each position
 const unsigned long HUMID_TIME = 30000;      // Humidifier on for 30 seconds
-const unsigned long PULSE_VERIFY_DELAY = 500;     // Time to verify pulse is valid (500ms)
-const int PULSE_VERIFY_COUNT = 5;                 // Number of consecutive reads required
 
 Servo motorServo;
 Servo armServo;
@@ -286,22 +284,7 @@ void startupHandAnimation() {
 void loop() {
   // Check touch sensor - cycles through: Motor -> Humidifier -> Catapult
   checkTouchSensor();
-}
-
-// Verify pulse is real (not noise) by checking multiple times
-bool verifyPulse(uint8_t pin) {
-  debugPrint("Verifying pulse...");
-  
-  for (int i = 0; i < PULSE_VERIFY_COUNT; i++) {
-    delay(PULSE_VERIFY_DELAY);
-    if (digitalRead(pin) != HIGH) {
-      debugPrint("Pulse verification FAILED - was noise");
-      return false;  // Not a real pulse, just noise
-    }
-  }
-  
-  debugPrint("Pulse verification PASSED - real pulse detected");
-  return true;  // Pulse is real
+  delay(500);
 }
 
 // ===== TOUCH SENSOR =====
@@ -311,33 +294,31 @@ void checkTouchSensor() {
   if (touchValue == HIGH) {
     // Only trigger once per touch (one-shot per activation)
     if (!touchTriggered) {
-      // Verify touch is real with multiple checks
-      if (verifyPulse(TOUCH_SENSOR_PIN)) {
-        touchTriggered = true;
-        
-        // Cycle through actions based on touch count
-        if (touchCount == 0) {
-          // First touch: Trigger Motor
-          Serial.println("TOUCH #1 verified - Triggering MOTOR!");
-          motorAction();
-          touchCount = 1;
-        } else if (touchCount == 1) {
-          // Second touch: Trigger Humidifier
-          Serial.println("TOUCH #2 verified - Triggering HUMIDIFIER!");
-          humidifierAction();
-          touchCount = 2;
-        } else if (touchCount == 2) {
-          // Third touch: Trigger Catapult (arm servo)
-          Serial.println("TOUCH #3 verified - Triggering CATAPULT!");
-          catapultAction();
-          touchCount = 0;  // Reset for next cycle
-        }
+      touchTriggered = true;
+      Serial.println("TOUCHED");
+      
+      // Cycle through actions based on touch count
+      if (touchCount == 0) {
+        // First touch: Trigger Motor
+        Serial.println("TOUCH #1 - Triggering MOTOR!");
+        motorAction();
+        touchCount = 1;
+      } else if (touchCount == 1) {
+        // Second touch: Trigger Humidifier
+        Serial.println("TOUCH #2 - Triggering HUMIDIFIER!");
+        humidifierAction();
+        touchCount = 2;
+      } else if (touchCount == 2) {
+        // Third touch: Trigger Catapult (arm servo)
+        Serial.println("TOUCH #3 - Triggering CATAPULT!");
+        catapultAction();
+        touchCount = 0;  // Reset for next cycle
       }
     }
   } else {
     // Reset when released so it can trigger again on next touch
     if (touchTriggered) {
-      Serial.println("Released - Ready for next touch");
+      Serial.println("not touched");
       Serial.print("Next action: ");
       if (touchCount == 0) Serial.println("MOTOR");
       else if (touchCount == 1) Serial.println("HUMIDIFIER");
